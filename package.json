@@ -1,0 +1,32 @@
+{
+  "name": "unist-util-to-string",
+  "version": "1.0.0",
+  "description": "unist utility to serialize to string using self-defined handlers.",
+  "license": "MIT",
+  "author": "watarichanno (watarichanno@gmail.com)",
+  "keywords": [
+    "ast",
+    "compile",
+    "markup",
+    "serialize",
+    "stringify",
+    "syntax",
+    "tree",
+    "unist",
+    "unist-util",
+    "util",
+    "utility"
+  ],
+  "type": "module",
+  "exports": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@types/unist": "^3.0.3"
+  },
+  "devDependencies": {
+    "prettier": "3.8.1",
+    "typescript": "^5.9.3"
+  }
+}
