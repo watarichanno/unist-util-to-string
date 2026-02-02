@@ -32,19 +32,39 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install"
+    "check:format": "prettier --check .",
+    "check:lint": "eslint --cache",
+    "check:types": "tsc --noEmit",
+    "check": "pnpm run check:types && pnpm run check:lint && pnpm run check:format",
+    "fix:format": "prettier --write .",
+    "fix:lint": "eslint --cache --fix",
+    "fix": "pnpm run fix:lint && pnpm run fix:format",
+    "prepare": "husky install",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "@types/unist": "^3.0.3"
   },
   "devDependencies": {
+    "@eslint/compat": "^2.0.2",
+    "@eslint/js": "^9.39.2",
+    "@eslint/json": "^1.0.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.3.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "3.8.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.54.0"
   },
   "lint-staged": {
-    "*.{ts,json}": "prettier --write"
+    "*.{js,json,ts}": [
+      "eslint --cache --fix",
+      "prettier --write"
+    ],
+    "*.md": [
+      "prettier --write"
+    ]
   }
 }
