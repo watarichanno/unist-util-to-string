@@ -34,8 +34,9 @@
     "fix:format": "prettier --write .",
     "fix:lint": "eslint --cache --fix",
     "fix": "pnpm run fix:lint && pnpm run fix:format",
-    "test": "vitest",
+    "test": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest",
     "prepare": "husky"
   },
   "dependencies": {
