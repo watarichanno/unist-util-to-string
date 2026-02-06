@@ -39,7 +39,7 @@
     "fix:format": "prettier --write .",
     "fix:lint": "eslint --cache --fix",
     "fix": "pnpm run fix:lint && pnpm run fix:format",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
     "prepare": "husky"
   },
   "dependencies": {
@@ -56,7 +56,8 @@
     "lint-staged": "^16.2.7",
     "prettier": "3.8.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.54.0"
+    "typescript-eslint": "^8.54.0",
+    "vitest": "^4.0.18"
   },
   "lint-staged": {
     "*.{js,json,ts}": [
