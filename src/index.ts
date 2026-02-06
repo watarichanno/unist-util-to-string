@@ -9,5 +9,8 @@ export interface Options {
 }
 
 export function toString(tree: Node, options?: Options): string {
-  return `${tree.type} | ${options}`;
+  if (options) {
+    return `${tree.type} | ${options}`;
+  }
+  return `${tree.type}`;
 }
