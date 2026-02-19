@@ -38,6 +38,7 @@ export function serialize<
 
   while (stack.length > 0) {
     const stackItem = stack.at(-1)!;
+    state.currentStackItem = stackItem;
 
     if (IsParentStackItem(stackItem)) {
       const node = stackItem.node;
@@ -51,20 +52,28 @@ export function serialize<
           break;
         }
       } else {
-        state.currentStackItem = stackItem;
+        stackItem.hasEntered = true;
 
         options.onNodeEnter?.(node, state);
 
-        const children = node.children as N[];
-        for (let i = children.length - 1; i >= 0; i--) {
-          stack.push({
-            node: children[i]!,
-            childrenResult: [],
-            hasEntered: false,
-          });
-        }
+        const childNodes = node.children as (N | P)[];
+        for (let i = childNodes.length - 1; i >= 0; i--) {
+          const childNode = childNodes[i]!;
 
-        stackItem.hasEntered = true;
+          if (IsParent(childNode)) {
+            stack.push({
+              node: childNode,
+              childrenResult: [],
+              parentStackItem: stackItem,
+              hasEntered: false,
+            });
+          } else {
+            stack.push({
+              node: childNode,
+              parentStackItem: stackItem,
+            });
+          }
+        }
       }
     } else {
       state.currentStackItem = stackItem;
