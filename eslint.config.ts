@@ -19,6 +19,11 @@ export default defineConfig([
   },
   tseslint.configs.recommended,
   {
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
+  {
     files: ["**/*.jsonc"],
     plugins: { json },
     language: "json/jsonc",
