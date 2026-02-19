@@ -52,7 +52,9 @@ export function serialize<
         }
       } else {
         state.currentStackItem = stackItem;
+
         options.onNodeEnter?.(node, state);
+
         const children = node.children as N[];
         for (let i = children.length - 1; i >= 0; i--) {
           stack.push({
@@ -61,6 +63,8 @@ export function serialize<
             hasEntered: false,
           });
         }
+
+        stackItem.hasEntered = true;
       }
     } else {
       state.currentStackItem = stackItem;
