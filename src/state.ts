@@ -1,5 +1,5 @@
 import type { Node, Parent } from "unist";
-import type { Options } from "./options.js";
+import type { Options } from "./serialize.js";
 
 export interface SimpleStackItem<N extends Node, P extends Parent, R> {
   node: N;
@@ -17,7 +17,7 @@ export type StackItem<N extends Node, P extends Parent, R> =
   | SimpleStackItem<N, P, R>
   | ParentStackItem<P, R>;
 
-export function IsParentStackItem<N extends Node, P extends Parent, R>(
+export function isParentStackItem<N extends Node, P extends Parent, R>(
   item: StackItem<N, P, R>,
 ): item is ParentStackItem<P, R> {
   return "childrenResult" in item;
