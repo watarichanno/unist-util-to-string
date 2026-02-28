@@ -1,7 +1,9 @@
 import type { Literal, Node, Parent } from "unist";
-import type { ParentStackItem, State } from "./state.js";
+import type { ParentStackItem, StackItem, State } from "./state.js";
 import { isLiteral } from "./utils.js";
-import { serialize, type Handler, type Options } from "./serialize.js";
+import { serialize, type Options } from "./serialize.js";
+
+export type Handler = (node: any, content?: string) => string;
 
 export interface StringifyOptions<
   N extends Node,
@@ -13,6 +15,18 @@ export interface StringifyOptions<
   nodeHandlers?: Record<string, Handler>;
   defaultResult?: string;
   customState?: CS;
+}
+
+export interface StringifyState<
+  N extends Node,
+  P extends Parent,
+  CS = undefined,
+> {
+  options: StringifyOptions<N, P, CS>;
+  stack: StackItem<N, P, string>[];
+  currentStackItem: StackItem<N, P, string>;
+  result: string;
+  customState?: CS | undefined;
 }
 
 function handle<N extends Node>(
@@ -30,7 +44,7 @@ function handle<N extends Node>(
 
 function onNodeEnter<N extends Node, P extends Parent, CS>(
   node: N | P,
-  state: State<N, P, string, CS>,
+  state: StringifyState<N, P, CS>,
 ): void {
   const handlers = state.options.nodeHandlers;
 
@@ -57,7 +71,7 @@ function onNodeEnter<N extends Node, P extends Parent, CS>(
 
 function onNodeExit<N extends Node, P extends Parent, CS>(
   node: P,
-  state: State<N, P, string, CS>,
+  state: StringifyState<N, P, CS>,
 ) {
   const handlers = state.options.nodeHandlers;
   const currentStackItem = state.currentStackItem as ParentStackItem<P, string>;
@@ -86,11 +100,18 @@ export function stringify<
   P extends Parent = Parent,
   CS = undefined,
 >(tree: N | P, options?: StringifyOptions<N, P, CS>): string {
-  const serializeOptions: Options<N, P, string, CS> = {
-    onNodeEnter,
-    onNodeExit,
+  const processedOptions: StringifyOptions<N, P, CS> = {
     defaultResult: "",
     ...options,
+  };
+
+  const serializeOptions: Options<N, P, string, CS> = {
+    onNodeEnter: (node, state) =>
+      onNodeEnter(node, { ...state, options: processedOptions }),
+    onNodeExit: (node, state) =>
+      onNodeExit(node, { ...state, options: processedOptions }),
+    defaultResult: "",
+    ...processedOptions,
   };
 
   return serialize<N, P, string, CS>(tree, serializeOptions);
